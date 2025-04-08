@@ -5,18 +5,21 @@ import java.util.List;
 import org.jdbi.v3.core.Jdbi;
 
 public class SpelerRepositoryJDBIimpl implements SpelerRepository {
-  private final Jdbi jdbi;
+  private Jdbi jdbi;
 
   // Constructor
   SpelerRepositoryJDBIimpl(String connectionString, String user, String pwd) {
-    // TODO: vul verder aan of verbeter
-    this.jdbi = null;
+    this.jdbi = Jdbi.create(connectionString, user, pwd);
   }
 
+
+  
   @Override
   public void addSpelerToDb(Speler speler) {
-    // TODO: verwijder de "throw new UnsupportedOperationException" en schrijf de code die de gewenste methode op de juiste manier implementeerd zodat de testen slagen.
-    throw new UnsupportedOperationException("Unimplemented method 'addSpelerToDb'");
+    jdbi.withHandle(handle -> {
+      return handle.execute("INSERT INTO speler (tennisvlaanderenid, naam, punten) VALUES (?, ?, ?);",
+          speler.getTennisvlaanderenid(), speler.getNaam(), speler.getPunten());
+    });
   }
 
   @Override

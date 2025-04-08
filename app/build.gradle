@@ -31,6 +31,7 @@ dependencies {
     //JDBI
     implementation 'org.jdbi:jdbi3-core:3.45.0'
     implementation 'org.jdbi:jdbi3-sqlobject:3.45.0'
+    
 
     // JPA
     // Hibernate core (controleer of dit de gewenste versie is)

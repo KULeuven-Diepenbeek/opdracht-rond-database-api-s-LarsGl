@@ -48,11 +48,11 @@ public class ConnectionManager {
       URI path = Objects.requireNonNull(App.class.getClassLoader().getResource("initTableWithDummyData.sql"))
           .toURI();
       var sql = new String(Files.readAllBytes(Paths.get(path)));
-      // System.out.println(sql);
       Statement statement = (Statement) connection.createStatement();
       statement.executeUpdate(sql);
       statement.close();
       connection.commit();
+      System.out.println("Database table initialized with dummy data.");
     } catch (Exception e) {
       System.out.println("An Error occurred when trying to initialize database table");
       e.printStackTrace();

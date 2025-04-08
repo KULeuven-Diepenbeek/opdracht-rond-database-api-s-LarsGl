@@ -3,8 +3,9 @@ package be.kuleuven;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import org.junit.Test;
-import static org.assertj.core.api.Assertions.*;
 
 public abstract class SpelerRepositoryTest {
   protected final String CONNECTIONSTRING_TO_TEST_DB = "jdbc:sqlite::memory:";
