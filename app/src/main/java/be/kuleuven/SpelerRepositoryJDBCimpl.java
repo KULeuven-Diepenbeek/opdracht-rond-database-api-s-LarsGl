@@ -23,11 +23,10 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
     try {
       PreparedStatement prepared = (PreparedStatement) connection
           .prepareStatement("INSERT INTO speler (tennisvlaanderenId, naam, punten) VALUES (?, ?, ?);");
-      prepared.setInt(1, speler.getTennisvlaanderenid()); // First questionmark
+      prepared.setInt(1, speler.getTennisvlaanderenId()); // First questionmark
       prepared.setString(2, speler.getNaam()); // Second questionmark
       prepared.setInt(3, speler.getPunten()); // Third questionmark
       prepared.executeUpdate();
-
       prepared.close();
       connection.commit();
     } catch (Exception e) {
@@ -88,12 +87,12 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
   @Override
   public void updateSpelerInDb(Speler speler) {
     // Check if speler is already in DB
-    getSpelerByTennisvlaanderenId(speler.getTennisvlaanderenid());
+    getSpelerByTennisvlaanderenId(speler.getTennisvlaanderenId());
     try {
       // WITH prepared statement
       PreparedStatement prepared = (PreparedStatement) connection
           .prepareStatement("UPDATE speler SET naam = ?, punten = ? WHERE tennisvlaanderenId = ?;");
-      prepared.setInt(3, speler.getTennisvlaanderenid()); // Third questionmark
+      prepared.setInt(3, speler.getTennisvlaanderenId()); // Third questionmark
       prepared.setString(1, speler.getNaam()); // First questionmark
       prepared.setInt(2, speler.getPunten()); // Second questionmark
       prepared.executeUpdate();
@@ -200,14 +199,41 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenid) {
 
 
   @Override
-  public void addSpelerToTornooi(int tornooiId) {
-    // TODO: verwijder de "throw new UnsupportedOperationException" en schrijf de code die de gewenste methode op de juiste manier implementeerd zodat de testen slagen.
-    throw new UnsupportedOperationException("Unimplemented method 'addSpelerToTornooi'");
+  public void addSpelerToTornooi(int tornooiId, int tennisvlaanderenId){
+    //check player exists
+    getSpelerByTennisvlaanderenId(tennisvlaanderenId);
+    try {
+      // WITH prepared statement
+      PreparedStatement prepared = (PreparedStatement) connection
+          .prepareStatement("INSERT INTO speler_speelt_tornooi (speler, tornooi) VALUES (?, ?);");
+      prepared.setInt(1, tennisvlaanderenId); // First questionmark
+      prepared.setInt(2, tornooiId); // Second questionmark
+      prepared.executeUpdate();
+
+      prepared.close();
+      connection.commit();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
+  
 
   @Override
-  public void removeSpelerFromTornooi(int tornooiId) {
-    // TODO: verwijder de "throw new UnsupportedOperationException" en schrijf de code die de gewenste methode op de juiste manier implementeerd zodat de testen slagen.
-    throw new UnsupportedOperationException("Unimplemented method 'removeSpelerFromTornooi'");
+  public void removeSpelerFromTornooi(int tornooiId, int tennisvlaanderenId){
+    //check player exists
+    getSpelerByTennisvlaanderenId(tennisvlaanderenId);
+    try {
+      // WITH prepared statement
+      PreparedStatement prepared = (PreparedStatement) connection
+          .prepareStatement("DELETE FROM speler_speelt_tornooi WHERE speler = ? AND tornooi = ?;");
+      prepared.setInt(1, tennisvlaanderenId); // First questionmark
+      prepared.setInt(2, tornooiId); // Second questionmark
+      prepared.executeUpdate();
+
+      prepared.close();
+      connection.commit();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }

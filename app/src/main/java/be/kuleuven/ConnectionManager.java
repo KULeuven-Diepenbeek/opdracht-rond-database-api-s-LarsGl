@@ -19,8 +19,8 @@ public class ConnectionManager {
       this.connection = (Connection) DriverManager.getConnection(connectionString, user, pwd);
       connection.setAutoCommit(false);
     } catch (SQLException e) {
-      System.out.println("Error connecting to database with connectionstring: " + connectionString + ", and user: "
-          + user + ", and the given password.");
+      // System.out.println("Error connecting to database with connectionstring: " + connectionString + ", and user: "
+      //     + user + ", and the given password.");
       e.printStackTrace();
       throw new RuntimeException(e);
     }

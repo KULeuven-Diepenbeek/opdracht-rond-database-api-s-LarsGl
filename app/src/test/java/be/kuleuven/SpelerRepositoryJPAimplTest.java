@@ -2,14 +2,19 @@ package be.kuleuven;
 
 import java.sql.SQLException;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
+
+import org.hibernate.SessionFactory;
 import org.junit.After;
 import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 
-
-public class SpelerRepositoryJDBIimplTest extends SpelerRepositoryTest {
+public class SpelerRepositoryJPAimplTest extends SpelerRepositoryTest {
   private ConnectionManager connectionManager;
+  private SessionFactory sessionFactory;
+  private EntityManager entityManager;
 
   @Before
   public void createDatabaseAndInitializeConnectionManager() {
@@ -23,13 +28,22 @@ public class SpelerRepositoryJDBIimplTest extends SpelerRepositoryTest {
       e.printStackTrace();
       throw new RuntimeException(e);
     }
-    super.spelerRepository = new SpelerRepositoryJDBIimpl(connectionManager.getConnection());
+    this.entityManager = Persistence.createEntityManagerFactory(SpelerRepositoryJPAimpl.PERSISTANCE_UNIT_NAME).createEntityManager();
+    super.spelerRepository = new SpelerRepositoryJPAimpl(entityManager);
     assertNotNull("SpelerRepository must be initialized by the subclass", super.spelerRepository);
   }
 
   @After
   public void closeConnections() {
     try {
+      if (this.entityManager != null && this.entityManager.isOpen()) {
+        this.entityManager.clear(); // detach all managed entities
+        this.entityManager.close(); // close the persistence context
+      }
+
+      if (this.sessionFactory != null && this.sessionFactory.isOpen()) {
+        this.sessionFactory.close(); // free metadata caches, connection pools
+      }
       connectionManager.getConnection().close();
     } catch (SQLException e) {
       e.printStackTrace();

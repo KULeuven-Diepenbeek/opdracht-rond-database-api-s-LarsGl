@@ -1,13 +1,38 @@
 package be.kuleuven;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "wedstrijd")
 public class Wedstrijd {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
   private int id;
+
+  @Column(name = "tornooi", nullable = false)
   private int tornooiId;
+
+  @Column(name = "speler1", nullable = false)
   private int speler1Id;
+
+  @Column(name = "speler2", nullable = false)
   private int speler2Id;
-  private int winnaarId;
+
+  @Column(name = "winnaar")
+  private Integer winnaarId;
+
+  @Column(name = "score")
   private String score;
-  private int finale; // Hierbij staat 1 voor finale, 2 voor halve finale, 4 voor kwart finale ...
+
+  @Column(name = "finale", nullable = false)
+  private int finale;
 
   public Wedstrijd() {
   };
@@ -24,6 +49,10 @@ public class Wedstrijd {
 
   public int getId() {
     return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 
   public int getTornooiId() {

@@ -31,7 +31,6 @@ dependencies {
     //JDBI
     implementation 'org.jdbi:jdbi3-core:3.45.0'
     implementation 'org.jdbi:jdbi3-sqlobject:3.45.0'
-    
 
     // JPA
     // Hibernate core (controleer of dit de gewenste versie is)
@@ -39,6 +38,8 @@ dependencies {
     // JPA API
     implementation 'javax.persistence:javax.persistence-api:2.2'
 
+    implementation "com.github.gwenn:sqlite-dialect:0.1.1"
+    
     // This dependency is used by the application.
     implementation libs.guava
 }

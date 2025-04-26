@@ -3,10 +3,18 @@
  */
 package be.kuleuven;
 
+import javax.persistence.Persistence;
+
 public class App {
 
     public static void main(String[] args) {
         System.out.println("Nothing to see here, use the Tests");
+
+        // // JPA
+        var sessionFactory = Persistence.createEntityManagerFactory("be.kuleuven.spelerhibernateTest");
+        var entityManager = sessionFactory.createEntityManager();
+        SpelerRepository sr = new SpelerRepositoryJPAimpl(entityManager);
+
     }
 
 }
