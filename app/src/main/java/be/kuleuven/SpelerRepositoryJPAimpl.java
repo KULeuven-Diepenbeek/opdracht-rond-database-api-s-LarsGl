@@ -102,10 +102,10 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenId) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = cb.createQuery(Object[].class);
         Root<Wedstrijd> wedstrijdRoot = query.from(Wedstrijd.class);
-
         Predicate speler1Predicate = cb.equal(wedstrijdRoot.get("speler1Id"), tennisvlaanderenId);
         Predicate speler2Predicate = cb.equal(wedstrijdRoot.get("speler2Id"), tennisvlaanderenId);
         Predicate finalePredicate = cb.isNotNull(wedstrijdRoot.get("finale"));
+
 
         query.multiselect(
                 wedstrijdRoot.get("tornooiId"),
@@ -129,6 +129,7 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenId) {
             Tornooi tornooi = em.find(Tornooi.class, tornooiId);
             String tornooiNaam = (tornooi != null) ? tornooi.getClubnaam() : "Onbekend Tornooi";
 
+            
             // --- Finale mapping ---
             String finaleString;
             switch (finale) {
@@ -157,12 +158,6 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenId) {
     return hoogsteRanking;
 }
 
-  
-  
-
-  
-  
-  
 
   @Override
   public void addSpelerToTornooi(int tornooiId, int tennisvlaanderenId) {

@@ -39,7 +39,8 @@ public class SpelerRepositoryJDBIimpl implements SpelerRepository {
             .findFirst()
             .orElse(null);
     });
-  
+    // Check if speler is found
+    // If not, throw an exception
     if (speler == null) {
       throw new InvalidSpelerException("Invalid Speler met identification: " + tennisvlaanderenId);
     }
@@ -66,7 +67,7 @@ public class SpelerRepositoryJDBIimpl implements SpelerRepository {
           .bindBean(speler)
           .execute();
     });
-    if (affectedRows == 0) {
+    if (affectedRows == 0) {//geen speler gevonden
       throw new InvalidSpelerException(speler.getTennisvlaanderenId() + "");
     }
   }
@@ -80,6 +81,7 @@ public class SpelerRepositoryJDBIimpl implements SpelerRepository {
           .bind("tennisvlaanderenid", tennisvlaanderenid)
           .execute();
     });
+
     if (affectedRows == 0) {
       throw new InvalidSpelerException(tennisvlaanderenid + "");
     }
@@ -100,13 +102,12 @@ public class SpelerRepositoryJDBIimpl implements SpelerRepository {
               .findFirst()
               .orElse(null);
       });
-  
       if (found_speler == null) {
           throw new InvalidSpelerException(tennisvlaanderenid + "");
       }
   
       // Hoogste ranking ophalen via JDBI
-      String hoogsteRanking = jdbi.withHandle(handle -> {
+      String hoogsteRanking = jdbi.withHandle(handle -> {//copy paste uit jdbc
           return handle.createQuery(
               "SELECT t.clubnaam, w.finale, w.winnaar " +
               "FROM wedstrijd w " +

@@ -23,12 +23,12 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
     try {
       PreparedStatement prepared = (PreparedStatement) connection
           .prepareStatement("INSERT INTO speler (tennisvlaanderenId, naam, punten) VALUES (?, ?, ?);");
-      prepared.setInt(1, speler.getTennisvlaanderenId()); // First questionmark
-      prepared.setString(2, speler.getNaam()); // Second questionmark
-      prepared.setInt(3, speler.getPunten()); // Third questionmark
-      prepared.executeUpdate();
-      prepared.close();
-      connection.commit();
+          prepared.setInt(1, speler.getTennisvlaanderenId()); // First questionmark
+          prepared.setString(2, speler.getNaam()); // Second questionmark
+          prepared.setInt(3, speler.getPunten()); // Third questionmark
+          prepared.executeUpdate();
+          prepared.close();
+          connection.commit();
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -49,21 +49,24 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
 
         found_speler = new Speler(tennisvlaanderenid, naam, punten);
       }
+      // Check if speler is found
+      // If not, throw an exception
       if (found_speler == null) {
         throw new InvalidSpelerException(tennisvlaanderenId + "");
       }
+
       result.close();
       s.close();
       connection.commit();
     } catch (Exception e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException(e);//error
     }
     return found_speler;
   }
 
   @Override
   public List<Speler> getAllSpelers() {
-    ArrayList<Speler> resultList = new ArrayList<Speler>();
+    ArrayList<Speler> resultList = new ArrayList<Speler>();//lege lijst
     try {
       Statement s = (Statement) connection.createStatement();
       String stmt = "SELECT * FROM speler";
@@ -75,6 +78,7 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
         int punten = result.getInt("punten");
         resultList.add(new Speler(tennisvlaanderenId, naam, punten));
       }
+
       result.close();
       s.close();
       connection.commit();
@@ -96,7 +100,6 @@ public class SpelerRepositoryJDBCimpl implements SpelerRepository {
       prepared.setString(1, speler.getNaam()); // First questionmark
       prepared.setInt(2, speler.getPunten()); // Second questionmark
       prepared.executeUpdate();
-
       prepared.close();
       connection.commit();
     } catch (Exception e) {
@@ -136,6 +139,8 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenid) {
                 found_speler = new Speler(tennisvlaanderenid, naam, punten);
             }
         }
+        // Check if speler is found
+        // If not, throw an exception
         if (found_speler == null) {
             throw new InvalidSpelerException(tennisvlaanderenid + "");
         }
@@ -143,7 +148,7 @@ public String getHoogsteRankingVanSpeler(int tennisvlaanderenid) {
     } catch (SQLException e) {
         throw new RuntimeException("Error fetching player data", e);
     }
-
+    //hoogste ranking
     String hoogsteRanking = null;
     try (PreparedStatement prepared = connection.prepareStatement(
         "SELECT t.clubnaam, w.finale, w.winnaar " +
